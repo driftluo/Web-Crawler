@@ -25,7 +25,7 @@ class OperationData:
 			finally:
 				self.conn.commit()
 
-	def updatanewchapter(self, dic):
+	def updatenewchapter(self, dic):
 		'''
 		dic.value structure [latestchapter, updatetime, bookname]
 		'''
@@ -38,7 +38,7 @@ class OperationData:
 				self.conn.commit()
 		self.close()
 
-	def updatabookmark(self, dic):
+	def updatebookmark(self, dic):
 		'''
 		dic.value structure [bookmark, bookname]
 		'''
@@ -64,7 +64,7 @@ class OperationData:
 				self.conn.commit()
 		self.close()
 
-	def updataurl(self, dic):
+	def updateurl(self, dic):
 		'''
 		dic.value structure [url, bookname]
 		'''
