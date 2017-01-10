@@ -55,9 +55,22 @@ class OperationData:
 		'''
 		dic.value structure [bookname]
 		'''
-		for v in dic.values:
+		for v in dic.values():
 			try:
 				self.cur.execute('delete from bookinformation where bookname=%s', tuple(v))
+			except:
+				print(sys.exc_info()[0])
+			finally:
+				self.conn.commit()
+		self.close()
+
+	def updataurl(self, dic):
+		'''
+		dic.value structure [url, bookname]
+		'''
+		for v in dic.values():
+			try:
+				self.cur.execute('updata bookinformation set url=%s where bookname=%s', tuple(v))
 			except:
 				print(sys.exc_info()[0])
 			finally:
