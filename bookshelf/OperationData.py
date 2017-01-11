@@ -20,10 +20,12 @@ class OperationData:
 		for v in dic.values():
 			try:
 				self.cur.execute('insert into bookinformation (bookname, latestchapter, url, bookmark) value(%s,%s,%s,%s)', tuple(v))
+				print('insert %s' % v[0])
 			except:
 				print(sys.exc_info())
 			finally:
 				self.conn.commit()
+		self.close()
 
 	def updatenewchapter(self, dic):
 		'''
@@ -31,9 +33,10 @@ class OperationData:
 		'''
 		for v in dic.values():
 			try:
-				self.cur.execute('updata bookinformation set latestchapter=%s updatatime=%s where bookname=%s', tuple(v))
+				self.cur.execute('update bookinformation set latestchapter=%s updatetime=%s where bookname=%s', tuple(v))
+				print('update newchapter %s, time is %s, bookname is %s' % tuple(v))
 			except:
-				print(sys.exc_info()[0])
+				print(sys.exc_info())
 			finally:
 				self.conn.commit()
 		self.close()
@@ -44,9 +47,10 @@ class OperationData:
 		'''
 		for v in dic.values():
 			try:
-				self.cur.execute('updata bookinformation set bookmark=%s where bookname=%s', tuple(v))
+				self.cur.execute('update bookinformation set bookmark=%s where bookname=%s', tuple(v))
+				print('update mark %s, bookname is %s' % tuple(v))
 			except:
-				print(sys.exc_info()[0])
+				print(sys.exc_info())
 			finally:
 				self.conn.commit()
 		self.close()
@@ -58,8 +62,9 @@ class OperationData:
 		for v in dic.values():
 			try:
 				self.cur.execute('delete from bookinformation where bookname=%s', tuple(v))
+				print('delete book %s' % tuple(v))
 			except:
-				print(sys.exc_info()[0])
+				print(sys.exc_info())
 			finally:
 				self.conn.commit()
 		self.close()
@@ -70,9 +75,10 @@ class OperationData:
 		'''
 		for v in dic.values():
 			try:
-				self.cur.execute('updata bookinformation set url=%s where bookname=%s', tuple(v))
+				self.cur.execute('update bookinformation set url=%s where bookname=%s', tuple(v))
+				print('update url=%s,bookname is %s' % tuple(v))
 			except:
-				print(sys.exc_info()[0])
+				print(sys.exc_info())
 			finally:
 				self.conn.commit()
 		self.close()
