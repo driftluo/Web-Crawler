@@ -33,7 +33,7 @@ class OperationData:
 		'''
 		for v in dic.values():
 			try:
-				self.cur.execute('update bookinformation set latestchapter=%s updatetime=%s where bookname=%s', tuple(v))
+				self.cur.execute('update bookinformation set latestchapter=%s, updatetime=%s where bookname=%s', tuple(v))
 				print('update newchapter %s, time is %s, bookname is %s' % tuple(v))
 			except:
 				print(sys.exc_info())

@@ -6,7 +6,7 @@ from lxml import etree
 import re
 from collections import defaultdict
 from selenium import webdriver
-import time, sys
+import time, sys, json
 
 class CrawlerData:
 	def __init__(self):
@@ -19,19 +19,21 @@ class CrawlerData:
 		self.url = 'http://t.qidian.com/BookCase/BookCase.php?caseId=-100'
 
 	def newchapter(self, url, bookname):
+		'''
+		Gets asynchronously loaded json data, and then fetch the useful things
+		'''
 		try:
 			self.req1 = requests.get(url, headers={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36',
-												'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'}).text
-			self.html1 = etree.HTML(self.req1)
-			print(self.req1)
-			self.uptime = self.html1.xpath('//div[@class="volume"]') #updatetime
-			print(self.uptime)
-			self.chaptername = self.html1.xpath('//div[@class="volume"][position()=last()]/ul/li[position()=last()]/a/text()') #chaptername
-			self.uptime = re.findall('\d{4}-\d{2}-\d{2}.{,2}\d{2}:\d{2}:\d{2}', self.uptime[0])
-			self.chapterdic[bookname] = self.chaptername + self.uptime
+												'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'})
+			self.req1.encoding = 'utf-8'
+			self.t_dict = json.loads(self.req1.text)
+			self.t1 = self.t_dict['data']['vs'][-1]['cs'][-1]['uT']		# updatetime
+			self.t2 = self.t_dict['data']['vs'][-1]['cs'][-1]['cN']		# newchapter
+			self.chapterdic[bookname] = [self.t2]
+			self.chapterdic[bookname].append(self.t1)
 			self.chapterdic[bookname].append(bookname)
 		except:
-			print(sys.exc_info(), self.uptime, bookname)
+			print(sys.exc_info())
 		
 	def newmark(self):
 		try:
