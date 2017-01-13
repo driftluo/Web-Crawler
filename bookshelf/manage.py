@@ -144,5 +144,5 @@ if __name__ == '__main__':
 		name = input('书名：')
 		chapter = input('章节名：')
 		name = name.strip()
-		name = chapter.strip()
+		chapter = chapter.strip()
 		manualmark(chapter, name)
