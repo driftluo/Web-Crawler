@@ -87,14 +87,17 @@ def updatenewchapter():
 	cur.close()
 	conn.close()
 	datas = [list(i) for i in datas]
+	threads = []
 	for data in datas:
 		data[0] = data[0].replace('http://book.qidian.com/info/',
 					'http://book.qidian.com/ajax/book/category?_csrfToken=EBlhyPLbneML9uLOUQy4vtlCLk9hwmXEUanzMtD7&bookId=')
 		print(data)
 		thread = threading.Thread(target=c.newchapter, args=data)
-		thread.setDaemon(True)
+		threads.append(thread)
 		thread.start()
-		time.sleep(1)
+		time.sleep(0.25)
+	for thread in threads:
+		thread.join()
 	d.updatenewchapter(c.chapterdic)
 		
 def updatenewmark():
