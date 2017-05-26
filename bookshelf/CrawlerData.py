@@ -13,10 +13,10 @@ class CrawlerData:
 		self.chapterdic = defaultdict(list)
 		self.markdic = defaultdict(list)
 		self.urldic = defaultdict(list)
-		self.headers = {'Cookie':
+		self.headers = {'Cookie':(),
 				'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36',
 				'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'}
-		self.url = 'http://t.qidian.com/BookCase/BookCase.php?caseId=-100'
+		self.url = 'http://my.qidian.com/ajax/BookShelf/BookList?_csrfToken=EBlhyPLbneML9uLOUQy4vtlCLk9hwmXEUanzMtD7&pageIndex=1&pageSize=100&sort=0&c=&gid=-100'
 
 	def newchapter(self, url, bookname):
 		'''
@@ -37,14 +37,13 @@ class CrawlerData:
 		
 	def newmark(self):
 		try:
-			self.req2 = requests.Session().get(self.url, headers=self.headers).text
-			self.html2 = etree.HTML(self.req2)
-			self.leng = len(self.html2.xpath('//tbody[@id="tbBookList"]/*')) + 1
-			for n in range(1, self.leng):
-				self.mark = self.html2.xpath('//tbody[@id="tbBookList"]/tr[%s]/td[5]/a/@title' % n) or [None]
-				self.bookname = self.html2.xpath('//tbody[@id="tbBookList"]/tr[%s]/td[3]/*[position()=last()-1]/text()' % n)
-				if self.mark[0]:
-					self.mark[0] = self.mark[0][5:]
+			self.req2 = requests.Session().get(self.url, headers=self.headers)
+			self.req2.encoding = 'utf-8'
+			self.data = json.loads(self.req2.text)
+			self.data = self.data['data']['listInfo']
+			for n in range(len(self.data)-1):
+				self.mark = [self.data[n]['readCname']]
+				self.bookname = [self.data[n]['bName']]
 				self.markdic[self.bookname[0]] = self.mark + self.bookname
 		except:
 			print(sys.exc_info())
